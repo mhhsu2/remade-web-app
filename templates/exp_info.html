@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Overview Remade Project
+{% endblock title %}
+{% block section_title %}
+    Overview
+{% endblock section_title %}
+
+{% block content %}
+
+    {% block form %}
+    
+    {% endblock form %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-1 mb-1">
+
+        <h3>Experiment Table</h3>
+
+        <div class="btn-toolbar mb-2 mb-md-0">
+
+            <div class="btn-group mr-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+            </div>
+            
+        </div>
+    </div>
+    <table id="data" class="table text-center table-sm table-hover table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Exp. ID</th>
+                <th>Loading Amplitude (kN)</th>
+                <th>Fatigue Life (%)</th>
+                <th>Infrared Camera</th>
+                <th>Acoustic Emission</th>
+                <th>Linear Ultrasound</th>
+                <th>Nonlinear Utrasound</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row['id'] }}</td>
+                <td>{{ row['loading_amp'] }}</td>
+                <td>{{ row['percent_fatigue_life' ]}}</td>
+                
+                {% if row['IR'] == 'Yes' %}
+                    <td><a href=#>{{ row['IR'] }}</a></td>
+                {% else %}
+                    <td>{{ row['IR'] }}</td>
+                {% endif %}
+
+                {% if row['AE'] == 'Yes' %}
+                <td><a href=#>{{ row['AE'] }}</a></td>
+                {% else %}
+                    <td>{{ row['AE'] }}</td>
+                {% endif %}
+                
+                {% if row['LU'] == 'Yes' %}
+                    <td><a href=#>{{ row['LU'] }}</a></td>
+                {% else %}
+                    <td>{{ row['LU'] }}</td>
+                {% endif %}
+
+                {% if row['NLU'] == 'Yes' %}
+                    <td><a href=#>{{ row['NLU'] }}</a></td>
+                {% else %}
+                    <td>{{ row['NLU'] }}</td>
+                {% endif %}
+            </tr> 
+            {% endfor %} 
+        </tbody>   
+    </table>
+
+
+{% endblock content %}

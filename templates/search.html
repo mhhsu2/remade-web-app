@@ -1,0 +1,66 @@
+{% extends 'exp_info.html' %}
+{% block title %}
+    Search Remade Project
+{% endblock title %}
+
+{% block section_title %}
+    {% if nde == 'ir' %}
+            Infarared Camera
+    {% elif nde == 'ae' %}
+            Acoustic Emission
+    {% elif nde == 'lu' %}
+            Linear Ultrasound
+    {% elif nde == 'nlu' %}
+            Nonlinear Ultrasound
+    {% endif %}    
+{% endblock section_title %}
+
+{% block form %}
+
+
+<h4>Search</h4>
+
+<form method='post' action="" class="form-group">
+    {{ form.hidden_tag() }}
+
+    <div class="form-row form-group align-items-center ">
+
+        <div class="col-md-3">
+            {{ form.loading_amp.label }} {{ form.loading_amp(class="custom-select") }}
+            <small class="form-text text-muted">(Press ctrl, alt, cmd to select multiple)</small>
+        </div>
+
+        {% if nde == 'lu' %}
+
+            <div class="col-md-3">
+                {{ form.position.label }} {{ form.position(class="custom-select") }}
+                <small class="form-text text-muted">(Press ctrl, alt, cmd to select multiple)</small>
+            </div>
+
+        {% elif nde == 'nlu' %}
+
+            <div class="col-md-3">
+                {{ form.position.label }} {{ form.position(class="custom-select") }}
+                <small class="form-text text-muted">(Press ctrl, alt, cmd to select multiple)</small>
+            </div>
+
+            <div class="col-md-3">
+                {{ form.nlu_amp.label }} {{ form.nlu_amp(class="custom-select") }}
+                <small class="form-text text-muted">(Press ctrl, alt, cmd to select multiple)</small>
+            </div>
+        {% endif %}
+
+        <div class="col-md-3">
+            {{ form.min_percent_fatigue_life.label }} {{ form.min_percent_fatigue_life(placeholder="0") }}
+            {{ form.max_percent_fatigue_life.label }} {{ form.max_percent_fatigue_life(placeholder="100") }}
+            {{ form.exp_id.label }} {{ form.exp_id(class="custom-form-group", placeholder='E.g. 1,2,3') }}
+            {{ form.submit() }}
+            <small class="form-text text-muted">(Deafult all)</small>
+        </div>
+            
+    </div>
+
+</form>
+{% endblock %}
+
+

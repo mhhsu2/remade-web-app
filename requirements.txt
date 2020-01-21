@@ -40,8 +40,8 @@ MarkupSafe==1.0
 matplotlib==3.1.1
 mccabe==0.6.1
 mkl-fft
-mkl-random==1.1.0
-mkl-service==2.3.0
+mkl-random
+mkl-service
 numpy==1.17.4
 oauth2==1.9.0.post1
 oauthlib==2.0.7

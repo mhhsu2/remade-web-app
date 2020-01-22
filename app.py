@@ -150,6 +150,7 @@ def result(nde):
         data = db.list_lu(loading_amp=loading_amp, exp_id=exp_id, position=position,
                             min_percent_fatigue_life=min_percent_fatigue_life, 
                             max_percent_fatigue_life=max_percent_fatigue_life)
+        print(data)
         return render_template('lu.html', data=data)
     
     elif nde == 'nlu':
@@ -159,6 +160,7 @@ def result(nde):
                             position=position, nlu_amp=nlu_amp,
                             min_percent_fatigue_life=min_percent_fatigue_life, 
                             max_percent_fatigue_life=max_percent_fatigue_life)
+        print(data)
         return render_template('nlu.html', data=data)
 
 @app.after_request

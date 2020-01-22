@@ -63,7 +63,7 @@ class Database:
                         position,
                         replicate,
                         CAST(norm_cycles*100 AS DECIMAL(5,2)) AS percent_fatigue_life, 
-                        FORMAT(avg_wave_speed, 2) AS avg_wave_speed 
+                        CAST(avg_wave_speed AS DECIMAL(6,2)) AS avg_wave_speed 
                         FROM lu
                     WHERE loading_amp IN ({})
                         AND exp_id IN ({})

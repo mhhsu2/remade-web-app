@@ -34,27 +34,6 @@ class Database:
         self.cur.execute(query)
         result= self.cur.fetchall()
         return result
-
-    # def list_ir(self, loading_amp, exp_id, min_percent_fatigue_life, max_percent_fatigue_life, page, perpage):
-    #     startat = page * perpage
-
-    #     amp = ', '.join(amp for amp in loading_amp)
-
-    #     query = """
-    #                 SELECT exp_id, 
-    #                     loading_amp, 
-    #                     CAST(norm_cycles*100 AS DECIMAL(5,2)) AS percent_fatigue_life, 
-    #                     cycles,
-    #                     FORMAT(temperature, 2) AS temperature 
-    #                     FROM remade.ir
-    #                 WHERE loading_amp IN ({})
-    #                     AND exp_id IN ({})
-    #                     AND norm_cycles BETWEEN {}/100 AND {}/100
-    #                 LIMIT {}, {};
-    #             """.format(amp, exp_id, min_percent_fatigue_life, max_percent_fatigue_life, startat, perpage)  
-    #     self.cur.execute(query)
-    #     result= self.cur.fetchall()
-    #     return result
     
     def list_ae(self, loading_amp, exp_id, min_percent_fatigue_life, max_percent_fatigue_life):
         amp = ', '.join(amp for amp in loading_amp)
@@ -65,7 +44,7 @@ class Database:
                         CAST(norm_cycles*100 AS DECIMAL(5,2)) AS percent_fatigue_life, 
                         cycles,
                         FORMAT(avg_ae_hits, 2) AS avg_ae_hits 
-                        FROM remade.ae
+                        FROM ae
                     WHERE loading_amp IN ({})
                         AND exp_id IN ({})
                         AND norm_cycles BETWEEN {}/100 AND {}/100;
@@ -85,7 +64,7 @@ class Database:
                         replicate,
                         CAST(norm_cycles*100 AS DECIMAL(5,2)) AS percent_fatigue_life, 
                         FORMAT(avg_wave_speed, 2) AS avg_wave_speed 
-                        FROM remade.lu
+                        FROM lu
                     WHERE loading_amp IN ({})
                         AND exp_id IN ({})
                         AND position IN ({})
@@ -109,7 +88,7 @@ class Database:
                         replicate,
                         CAST(norm_cycles*100 AS DECIMAL(5,2)) AS percent_fatigue_life, 
                         FORMAT(beta, 4) AS beta 
-                        FROM remade.nlu
+                        FROM nlu
                     WHERE loading_amp IN ({})
                         AND exp_id IN ({})
                         AND position IN ({})

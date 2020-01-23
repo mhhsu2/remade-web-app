@@ -113,7 +113,7 @@ def plot_ae(data):
     # # Save file
     nde = 'ae'
     filename = 'temp.png'
-    filepath = os.path.join( 'static/fig/result', nde, filename)
+    filepath = os.path.join(current_app.root_path, 'static/fig/result', nde, filename)
 
     # Save result to temp.png
 
@@ -147,8 +147,6 @@ def plot_lu(data):
     
 
     return os.path.join('fig/result', nde, filename)
-
-
 
 
 # %%

@@ -157,6 +157,7 @@ def result(nde):
     elif nde == 'nlu':
         position = session.get('position', None)
         nlu_amp = session.get('nlu_amp', None)
+        
         data = db.list_nlu(loading_amp=loading_amp, exp_id=exp_id, 
                             position=position, nlu_amp=nlu_amp,
                             min_percent_fatigue_life=min_percent_fatigue_life, 

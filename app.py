@@ -52,7 +52,7 @@ def search(nde):
         # Form choices from data
         df = pd.DataFrame(data)
         form.loading_amp.choices = [(v, v) for v in list(df['loading_amp'].unique())]
-        form.exp_id.choices = [(v, v) for v in list(df['id'].dropna().unique().astype(int))]
+
 
         if form.is_submitted():
             session['nde'] = nde
@@ -73,7 +73,6 @@ def search(nde):
         # Form choices from data
         df = pd.DataFrame(data)
         form.loading_amp.choices = [(v, v) for v in list(df['loading_amp'].unique())]
-        form.exp_id.choices = [(v, v) for v in list(df['id'].dropna().unique().astype(int))]
         form.position.choices = [(v, v) for v in range(1,6)]
 
         if form.is_submitted():
@@ -96,7 +95,6 @@ def search(nde):
         # Form choices from data
         df = pd.DataFrame(data)
         form.loading_amp.choices = [(v, v) for v in list(df['loading_amp'].unique())]
-        form.exp_id.choices = [(v, v) for v in list(df['id'].dropna().unique().astype(int))]
         form.position.choices = [(v, v) for v in range(1,6)]
         form.nlu_amp.choices = [(v, v) for v in range(1,12)]
 

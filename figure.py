@@ -75,7 +75,6 @@ def plot_ir(data):
 # Acoustic Emission
 def plot_ae(data):
     
-
     df = pd.DataFrame(data)
     df = df.apply(pd.to_numeric, errors='ignore')
 
@@ -125,19 +124,15 @@ def plot_ae(data):
     return os.path.join('fig/result', nde, filename)
 
 # %%
-# Acoustic Emission
+# Linear Ultrasound
 def plot_lu(data):
     
     df = pd.DataFrame(data)
     df = df.apply(pd.to_numeric, errors='ignore')
 
     plt.figure(figsize=(15,6))
-    g = sns.FacetGrid(data=df, hue='loading_amp', height=3)
+    g = sns.FacetGrid(data=df, hue='loading_amp', height=4)
     g.map(sns.regplot, 'percent_fatigue_life', 'avg_wave_speed',  ci=None)
-
-    # Annotate
-    for ax in g.axes.ravel():
-        gax = ax
 
     g.add_legend(bbox_to_anchor=(1.2,0.5))
     g.set_ylabels('Wave Speed (m/s)')
@@ -147,38 +142,35 @@ def plot_lu(data):
     # Save result to temp.png
     nde = 'lu'
     filename = 'temp.png'
-    filepath = os.path.join( 'static/fig/result', nde, filename)
+    filepath = os.path.join(current_app.root_path, 'static/fig/result', nde, filename)
     plt.savefig(filepath, dpi=200,  bbox_inches="tight")
     
 
     return os.path.join('fig/result', nde, filename)
 
 
-# %%
-df = pd.DataFrame(data)
-df = df.apply(pd.to_numeric, errors='ignore')
-
-plt.figure(figsize=(15,6))
-g = sns.FacetGrid(data=df, hue='loading_amp', height=3)
-g.map(sns.regplot, 'percent_fatigue_life', 'avg_wave_speed',  ci=None)
-
-# Annotate
-for ax in g.axes.ravel():
-    gax = ax
-
-g.add_legend(bbox_to_anchor=(1.2,0.5))
-g.set_ylabels('Wave Speed (m/s)')
-g.set_xlabels('Fatigue Life (%)')
-plt.tight_layout()
-
-# Save result to temp.png
-nde = 'lu'
-filename = 'temp.png'
-filepath = os.path.join( 'static/fig/result', nde, filename)
-plt.savefig(filepath, dpi=200,  bbox_inches="tight")
 
 
 # %%
-plot_lu(data)
+# Nonlinear Ultrasound
+def plot_nlu(data):
+    
+    df = pd.DataFrame(data)
+    df = df.apply(pd.to_numeric, errors='ignore')
 
-# %%
+    plt.figure(figsize=(15,6))
+    g = sns.FacetGrid(data=df, hue='loading_amp', height=4)
+    g.map(sns.regplot, 'percent_fatigue_life', 'beta',  ci=None)
+
+    g.add_legend(bbox_to_anchor=(1.2,0.5))
+    g.set_ylabels('Acoustic Nonliear Parameter')
+    g.set_xlabels('Fatigue Life (%)')
+    plt.tight_layout()
+
+    # Save result to temp.png
+    nde = 'nlu'
+    filename = 'temp.png'
+    filepath = os.path.join(current_app.root_path, 'static/fig/result', nde, filename)
+    plt.savefig(filepath, dpi=200,  bbox_inches="tight")
+
+    return os.path.join('fig/result', nde, filename)

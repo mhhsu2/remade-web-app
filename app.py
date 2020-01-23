@@ -3,7 +3,7 @@ from flask import Flask, redirect, render_template, request, session, url_for
 
 from db import Database
 from forms import IrAndAeForm, LuForm, NluForm
-from figure import plot_ir
+from figure import plot_ir, plot_ae, plot_lu, plot_nlu
 
 import time
 
@@ -132,17 +132,18 @@ def result(nde):
                             max_percent_fatigue_life=max_percent_fatigue_life)
         
         # Plot figure
-        t = time.time()
         fig_url = plot_ir(data)
-        print(time.time()-t)
 
-        return render_template('ir.html', data=data, fig_url=fig_url)
+        return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
     
     elif nde == 'ae':
         data = db.list_ae(loading_amp=loading_amp, exp_id=exp_id, 
                             min_percent_fatigue_life=min_percent_fatigue_life, 
                             max_percent_fatigue_life=max_percent_fatigue_life)
-        return render_template('ae.html', data=data)
+
+        fig_url = plot_ae(data)
+
+        return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
     
     elif nde == 'lu':
         position = session.get('position', None)
@@ -150,8 +151,10 @@ def result(nde):
         data = db.list_lu(loading_amp=loading_amp, exp_id=exp_id, position=position,
                             min_percent_fatigue_life=min_percent_fatigue_life, 
                             max_percent_fatigue_life=max_percent_fatigue_life)
-        print(data)
-        return render_template('lu.html', data=data)
+
+        fig_url = plot_lu(data)
+
+        return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
     
     elif nde == 'nlu':
         position = session.get('position', None)
@@ -160,8 +163,8 @@ def result(nde):
                             position=position, nlu_amp=nlu_amp,
                             min_percent_fatigue_life=min_percent_fatigue_life, 
                             max_percent_fatigue_life=max_percent_fatigue_life)
-        print(data)
-        return render_template('nlu.html', data=data)
+        fig_url = plot_nlu(data)
+        return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
 
 @app.after_request
 def after_request(response):

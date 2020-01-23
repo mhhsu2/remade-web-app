@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Result-NDE REMADE
+{% endblock title %}
+
+{% block section_title %}
+    {% if nde == 'ir' %}
+            Infarared Camera
+    {% elif nde == 'ae' %}
+            Acoustic Emission
+    {% elif nde == 'lu' %}
+            Linear Ultrasound
+    {% elif nde == 'nlu' %}
+            Nonlinear Ultrasound
+    {% endif %}    
+{% endblock section_title %}
+
+{% block content %}
+<div class="container-fluid">
+    
+    <h3>Figure</h3>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <img src="{{ url_for('static', filename= fig_url) }}" alt=""  class="img-fluid" style="Max-width: 80%">
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-1 mb-1">
+
+        <h3>Data</h3>
+
+        <div class="btn-toolbar mb-2 mb-md-0">
+
+            <div class="btn-group mr-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+            </div>
+
+        </div>
+    </div>
+    
+    <table id="data" class="table text-center table-sm table-striped table-bordered">
+    
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Exp. ID</th>
+            <th>Loading Amplitude</th>
+            <th>Percent of Fatigue Life</th>
+            
+            {% if nde == 'ir' %}
+
+                <th>Temperature</th>
+                <th>Cycles</th>
+
+            {% elif nde == 'ae' %}
+
+                <th>Average AE Hits</th>
+                <th>Cycles</th>
+
+            {% elif nde == 'lu' %}
+
+                <th>Wave Speed</th>
+
+            {% elif nde == 'nlu' %}
+
+                <th>Acoustic Nonlinear Paramter</th>
+
+            {% endif %}
+            
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for row in data %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ row['exp_id'] }}</td>
+            <td>{{ row['loading_amp'] }}</td>
+            <td>{{ row['percent_fatigue_life' ]}}</td>
+
+            {% if nde == 'ir' %}
+
+                <td>{{ row['temperature'] }}</td>
+                <td>{{ row['cycles'] }}</td>
+
+            {% elif nde == 'ae' %}
+
+                <td>{{ row['avg_ae_hits'] }}</td>  
+                <td>{{ row['cycles'] }}</td>
+
+            {% elif nde == 'lu' %}
+
+                <td>{{ row['avg_wave_speed'] }}</td>
+
+            {% elif nde == 'nlu' %}
+
+                <td>{{ row['beta'] }}</td>
+
+            {% endif %}
+
+        {% endfor %}
+    </tbody>
+
+</div>
+
+
+{% endblock content %}

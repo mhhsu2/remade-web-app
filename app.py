@@ -139,9 +139,9 @@ def result(nde):
                             min_percent_fatigue_life=min_percent_fatigue_life, 
                             max_percent_fatigue_life=max_percent_fatigue_life)
 
-        #fig_url = plot_ae(data)
+        fig_url = plot_ae(data)
 
-        return render_template('result.html', data=data, nde=nde)
+        return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
     
     elif nde == 'lu':
         position = session.get('position', None)
@@ -150,9 +150,9 @@ def result(nde):
                             min_percent_fatigue_life=min_percent_fatigue_life, 
                             max_percent_fatigue_life=max_percent_fatigue_life)
 
-        #fig_url = plot_lu(data)
+        fig_url = plot_lu(data)
 
-        return render_template('result.html', data=data, nde=nde)
+        return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
     
     elif nde == 'nlu':
         position = session.get('position', None)
@@ -161,8 +161,8 @@ def result(nde):
                             position=position, nlu_amp=nlu_amp,
                             min_percent_fatigue_life=min_percent_fatigue_life, 
                             max_percent_fatigue_life=max_percent_fatigue_life)
-        #fig_url = plot_nlu(data)
-        return render_template('result.html', data=data, nde=nde)
+        fig_url = plot_nlu(data)
+        return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
 
 @app.after_request
 def after_request(response):

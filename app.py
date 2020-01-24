@@ -18,6 +18,10 @@ def index():
 
     return render_template('exp_info.html', data=data)
 
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('error_pages/500.html'), 500
+
 @app.route('/search/<nde>', methods=['GET', 'POST'])
 def search(nde):
     db = Database()
@@ -170,4 +174,4 @@ def after_request(response):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

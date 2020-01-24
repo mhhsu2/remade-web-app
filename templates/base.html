@@ -53,11 +53,11 @@
             Data
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Overview</a>
-            <a class="dropdown-item" href="#">Infrared Camera</a>
-            <a class="dropdown-item" href="#">Acoustic Emission</a>
-            <a class="dropdown-item" href="#">Linear Ultrasound</a>
-            <a class="dropdown-item" href="#">Nonlinear Ultrasound</a>
+            <a class="dropdown-item" href="/">Overview</a>
+            <a class="dropdown-item" href="{{ url_for('search', nde='ir') }}">Infrared Camera</a>
+            <a class="dropdown-item" href="{{ url_for('search', nde='ae') }}">Acoustic Emission</a>
+            <a class="dropdown-item" href="{{ url_for('search', nde='lu') }}">Linear Ultrasound</a>
+            <a class="dropdown-item" href="{{ url_for('search', nde='nlu') }}">Nonlinear Ultrasound</a>
           </div>
         </li>
 

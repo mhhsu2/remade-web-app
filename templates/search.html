@@ -27,26 +27,26 @@
 
         <div class="col-md-3">
             {{ form.loading_amp.label }} {{ form.loading_amp(class="custom-select") }}
-            <small class="form-text text-muted">(Press ctrl, alt, cmd to select multiple)</small>
+            <small class="form-text text-muted">(Press ctrl, alt, to select multiple items)</small>
         </div>
 
         {% if nde == 'lu' %}
 
             <div class="col-md-3">
                 {{ form.position.label }} {{ form.position(class="custom-select") }}
-                <small class="form-text text-muted">(Press ctrl, alt, cmd to select multiple)</small>
+                <small class="form-text text-muted">(Press ctrl, alt, to select multiple items)</small>
             </div>
 
         {% elif nde == 'nlu' %}
 
             <div class="col-md-3">
                 {{ form.position.label }} {{ form.position(class="custom-select") }}
-                <small class="form-text text-muted">(Press ctrl, alt, cmd to select multiple)</small>
+                <small class="form-text text-muted">(Press ctrl, alt, to select multiple items)</small>
             </div>
 
             <div class="col-md-3">
                 {{ form.nlu_amp.label }} {{ form.nlu_amp(class="custom-select") }}
-                <small class="form-text text-muted">(Press ctrl, alt, cmd to select multiple)</small>
+                <small class="form-text text-muted">(Press ctrl, alt, to select multiple items)</small>
             </div>
         {% endif %}
 

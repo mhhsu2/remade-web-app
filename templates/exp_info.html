@@ -19,7 +19,7 @@
 
 
     <p>The table below shows the information of conducted experiments and their available Non-Destructive Evulation (NDE) data.</p>
-    <p>To search specific NDE data, please go to the search pages listed at the side bar. </p>
+    <p>To search specific NDE data, please go to the search pages. </p>
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-1 mb-1">
 
@@ -47,25 +47,25 @@
                 <td>{{ row['percent_fatigue_life' ]}}</td>
                 
                 {% if row['IR'] == 'Yes' %}
-                    <td><a href=#>{{ row['IR'] }}</a></td>
+                    <td><a href="{{ url_for('search', nde='ir') }}">{{ row['IR'] }}</a></td>
                 {% else %}
                     <td>{{ row['IR'] }}</td>
                 {% endif %}
 
                 {% if row['AE'] == 'Yes' %}
-                <td><a href=#>{{ row['AE'] }}</a></td>
+                <td><a href="{{ url_for('search', nde='ae') }}">{{ row['AE'] }}</a></td>
                 {% else %}
                     <td>{{ row['AE'] }}</td>
                 {% endif %}
                 
                 {% if row['LU'] == 'Yes' %}
-                    <td><a href=#>{{ row['LU'] }}</a></td>
+                    <td><a href="{{ url_for('search', nde='lu') }}">{{ row['LU'] }}</a></td>
                 {% else %}
                     <td>{{ row['LU'] }}</td>
                 {% endif %}
 
                 {% if row['NLU'] == 'Yes' %}
-                    <td><a href=#>{{ row['NLU'] }}</a></td>
+                    <td><a href="{{ url_for('search', nde='nlu') }}">{{ row['NLU'] }}</a></td>
                 {% else %}
                     <td>{{ row['NLU'] }}</td>
                 {% endif %}

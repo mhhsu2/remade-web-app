@@ -7,19 +7,19 @@
     Overview
 {% endblock section_title %}
 
+{% block description %}
+    <p>The table below shows the information of conducted experiments and their available Non-Destructive Evulation (NDE) data.</p>
+    <p>To search specific NDE data, please go to the search pages. </p>
+{% endblock description %}
+
 {% block content %}
 
-    {% block description %}
-        
-    {% endblock description %}
+
 
     {% block form %}
     
     {% endblock form %}
 
-
-    <p>The table below shows the information of conducted experiments and their available Non-Destructive Evulation (NDE) data.</p>
-    <p>To search specific NDE data, please go to the search pages. </p>
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-1 mb-1">
 
@@ -70,6 +70,7 @@
                     <td>{{ row['NLU'] }}</td>
                 {% endif %}
             </tr> 
+            
             {% endfor %} 
         </tbody>   
     </table>

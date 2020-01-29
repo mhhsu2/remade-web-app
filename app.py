@@ -1,11 +1,11 @@
 import pandas as pd
-from flask import Flask, redirect, render_template, request, session, url_for
+from flask import Flask, redirect, render_template, request, session, url_for, flash, Response
 
 from db import Database
 from forms import IrAndAeForm, LuForm, NluForm
 from figure import plot_ir, plot_ae, plot_lu, plot_nlu
 
-import time
+import boto3
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'my key values'
@@ -171,6 +171,40 @@ def result(nde):
 def after_request(response):
 	response.headers["Cache-Control"] = "no-store"
 	return response
+
+@app.route('/files')
+def files():
+    s3_resource = boto3.resource('s3')
+    my_bucket = s3_resource.Bucket('remade-nde')
+    summaries = my_bucket.objects.all()
+
+    return render_template('files.html', my_bucket=my_bucket, files=summaries)
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    file = request.files['file']
+
+    s3_resource = boto3.resource('s3')
+    my_bucket = s3_resource.Bucket('remade-nde')
+    my_bucket.Object('test').put(Body=file)
+
+    flash('File uploaded successfully')
+    return redirect(url_for('files'))
+
+@app.route('/download', methods=['POST'])
+def download():
+    key = request.form['key']
+
+    s3_resource = boto3.resource('s3')
+    my_bucket = s3_resource.Bucket('remade-nde')
+
+    file_obj = my_bucket.Object(key).get()
+
+    return Response(
+        file_obj['Body'].read(),
+        mimetype='text/csv',
+        headers={"Content-Disposition": "attachment;filename={}".format(key)}
+    )
 
 
 if __name__ == '__main__':

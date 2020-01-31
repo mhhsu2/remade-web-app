@@ -2,8 +2,10 @@ import pandas as pd
 from flask import Flask, redirect, render_template, request, session, url_for, flash, Response
 
 from db import Database
-from forms import IrAndAeForm, LuForm, NluForm
+from forms import IrAndAeForm, LuForm, NluForm, UploadForm
 from figure import plot_ir, plot_ae, plot_lu, plot_nlu
+
+from utils import naming_file
 
 import boto3
 
@@ -172,24 +174,36 @@ def after_request(response):
 	response.headers["Cache-Control"] = "no-store"
 	return response
 
-@app.route('/files')
+@app.route('/files', methods=['GET', 'POST'])
 def files():
     s3_resource = boto3.resource('s3')
     my_bucket = s3_resource.Bucket('remade-nde')
     summaries = my_bucket.objects.all()
 
-    return render_template('files.html', my_bucket=my_bucket, files=summaries)
+    form = UploadForm()
 
-@app.route('/upload', methods=['POST'])
-def upload():
-    file = request.files['file']
+    if form.is_submitted():
+        info = {'nde': form.nde.data, 'exp_id': form.exp_id.data,
+                'loading_amp': form.loading_amp.data, 'percent_fatigue_life': form.percent_fatigue_life.data,
+                'nlu_amp': form.nlu_amp.data, 'position': form.position.data}
 
-    s3_resource = boto3.resource('s3')
-    my_bucket = s3_resource.Bucket('remade-nde')
-    my_bucket.Object('test').put(Body=file)
+        filename = naming_file(info)
 
-    flash('File uploaded successfully')
-    return redirect(url_for('files'))
+        file = request.files['file']
+        s3_resource = boto3.resource('s3')
+        my_bucket = s3_resource.Bucket('remade-nde')
+        my_bucket.Object(filename).put(Body=file)
+        data = my_bucket.Object(filename).get()['Body']
+        df = pd.read_csv(data)
+
+
+        print(df)
+
+        flash('File uploaded successfully')
+        return redirect(url_for('files'))
+
+    return render_template('files.html', my_bucket=my_bucket, files=summaries, form=form)
+
 
 @app.route('/download', methods=['POST'])
 def download():

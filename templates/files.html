@@ -1,55 +1,57 @@
 {% extends "base.html" %}
 
 {% block title %}
-    File list
+    Upload-NDE REMADE
 {% endblock title %}
 
+{% block section_title %}
+    Upload
+{% endblock section_title %}
+
+{% block description %}
+
+{% endblock description %}
+
+
 {% block content %}
-  <div class="container">
-    <div class="col-12-xs">
-      <h3>Bucket Info</h3>
-      <p>Created: {{ my_bucket.creation_date  }}</p>
 
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-          <p class="bg-info" style="padding: 15px;">
-          {% for message in messages %}
-            {{ message }}<br>
-          {% endfor %}
-          </p>
-        {% endif %}
-      {% endwith %}
+  {% block form %}
 
-      <hr>
 
-      <form class="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
-        <p><input type="file"  name="file"></p>
-        <button type="submit" class="btn btn-secondary btn-sm">Upload</button>
-      </form>
+  <form class="upload-form" action="" method="POST" enctype="multipart/form-data" >
+      {{ form.hidden_tag() }}
 
-      <table class="table table-striped">
-        <tr>
-          <th>Filename</th>
-          <th>Last Modified</th>
-          <th>Type</th>
-        </tr>
-        {% for f in files %}
-        <tr>
+      <div class="form-row form-group align-items-center ">
 
-          <td>{{ f.key }}</td>
-          <td>{{ f.last_modified  }}</td>
-          <td>{{ f.key }}</td>
+          <div class="col-md-3">
+              {{ form.nde.label }} {{ form.nde() }}
+          </div>
 
-          <td class="td-buttons">
-            <form class="download-form" action="{{ url_for('download') }}" method="POST">
-              <input type="hidden" name="key" value="{{ f.key }}">
-              <button type="submit" class="btn btn-secondary btn-sm">{{ f.key }}</button>
-            </form>
-          </td>
+          <div class="col-md-3">
+              {{ form.exp_id.label }} <br> {{ form.exp_id() }}
 
-        </tr>
-        {% endfor %}
-      </table>
-    </div>
-  </div>
+              {{ form.loading_amp.label }} <br> {{ form.loading_amp() }} <br>
+
+              {{ form.percent_fatigue_life.label }} <br> {{ form.percent_fatigue_life() }}
+              <small class="form-text text-muted">Please refer to the experimental table. </small>
+             
+          </div>
+
+          <div class="col-md-3">
+            {{ form.position.label }} <br> {{ form.position(placeholder="LU and NLU only")  }} <br>
+
+            {{ form.nlu_amp.label }} <br> {{ form.nlu_amp(placeholder="NLU only") }}
+          </div>
+
+          <div class="col-md-3">
+              <p><input type="file"  name="file"></p>
+              <button type="submit" class="btn btn-secondary btn-sm">Upload</button>
+          </div>
+
+      </div>
+
+  </form>
+  {% endblock %}
+
+
 {% endblock %}

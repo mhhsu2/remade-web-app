@@ -1,0 +1,47 @@
+{% extends 'exp_info.html' %}
+{% block title %}
+    Upload-NDE REMADE
+{% endblock title %}
+
+{% block section_title %}
+    Upload
+{% endblock section_title %}
+
+{% block description %}
+
+{% endblock description %}
+
+{% block form %}
+
+
+<form class="upload-form" action="" method="POST" enctype="multipart/form-data" >
+    {{ form.hidden_tag() }}
+
+    <div class="form-row form-group align-items-center ">
+
+        <div class="col-md-3">
+            {{ form.nde.label }} {{ form.nde() }}
+            <small class="form-text text-muted">(Press ctrl, alt, to select multiple items)</small>
+        </div>
+
+        <div class="col-md-6">
+            {{ form.sample_id.label(class="form-group") }} {{ form.sample_id(class="form-group-control") }}
+            <small class="form-text text-muted">(Press ctrl, alt, to select multiple items)</small>
+            {{ form.loading_amp.label }} {{ form.loading_amp() }}
+            <small class="form-text text-muted">(Press ctrl, alt, to select multiple items)</small>
+            {{ form.nlu_amp.label }} {{ form.nlu_amp() }}
+            <small class="form-text text-muted">(Press ctrl, alt, to select multiple items)</small>
+            {{ form.position.label }} {{ form.position() }}
+            <small class="form-text text-muted">(Press ctrl, alt, to select multiple items)</small>
+            
+        </div>
+
+        <div class="col-md-3">
+            <p><input type="file"  name="file"></p>
+            <button type="submit" class="btn btn-secondary btn-sm">Upload</button>
+        </div>
+
+    </div>
+
+</form>
+{% endblock %}

@@ -43,14 +43,14 @@
             
             {% if nde == 'ir' %}
 
-                <th>Temperature</th>
                 <th>Cycles</th>
+                <th>Temperature ()</th>
 
             {% elif nde == 'ae' %}
 
-                <th>Average AE Hits</th>
                 <th>Cycles</th>
-
+                <th>Average AE Hits</th>
+                
             {% elif nde == 'lu' %}
 
                 <th>Wave Speed</th>
@@ -74,14 +74,15 @@
 
             {% if nde == 'ir' %}
 
-                <td>{{ row['temperature'] }}</td>
                 <td>{{ row['cycles'] }}</td>
+                <td>{{ row['temperature'] }}</td>
+                
 
             {% elif nde == 'ae' %}
 
-                <td>{{ row['avg_ae_hits'] }}</td>  
                 <td>{{ row['cycles'] }}</td>
-
+                <td>{{ row['avg_ae_hits'] }}</td>  
+                
             {% elif nde == 'lu' %}
 
                 <td>{{ row['avg_wave_speed'] }}</td>

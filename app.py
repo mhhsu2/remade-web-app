@@ -72,7 +72,7 @@ def search(nde):
         # Form choices from data
         df = pd.DataFrame(data)
         form.loading_amp.choices = [(v, v) for v in list(df['loading_amp'].unique())]
-        form.position.choices = [(v, v) for v in range(1,6)]
+        form.dist_from_center.choices = [(v, v) for v in [-90, -60, -40, -20, 0, 20, 40, 60, 90]]
 
         if form.is_submitted():
             session['nde'] = nde
@@ -82,7 +82,7 @@ def search(nde):
             if session['exp_id'] == '':
                 session['exp_id'] = str(list(df['id'].dropna().unique().astype(int))).strip('[]')
             
-            session['position'] = form.position.data
+            session['dist_from_center'] = form.dist_from_center.data
             session['min_percent_fatigue_life'] = form.min_percent_fatigue_life.data
             session['max_percent_fatigue_life'] = form.max_percent_fatigue_life.data
             return redirect(url_for('result', nde=nde))
@@ -94,7 +94,7 @@ def search(nde):
         # Form choices from data
         df = pd.DataFrame(data)
         form.loading_amp.choices = [(v, v) for v in list(df['loading_amp'].unique())]
-        form.position.choices = [(v, v) for v in range(1,6)]
+        form.dist_from_center.choices = [(v, v) for v in [-90, -60, -40, -20, 0, 20, 40, 60, 90]]
         form.nlu_amp.choices = [(v, v) for v in range(1,12)]
 
         if form.is_submitted():
@@ -105,8 +105,30 @@ def search(nde):
             if session['exp_id'] == '':
                 session['exp_id'] = str(list(df['id'].dropna().unique().astype(int))).strip('[]')
             
-            session['position'] = form.position.data
+            session['dist_from_center'] = form.dist_from_center.data
             session['nlu_amp'] = form.nlu_amp.data
+            session['min_percent_fatigue_life'] = form.min_percent_fatigue_life.data
+            session['max_percent_fatigue_life'] = form.max_percent_fatigue_life.data
+            return redirect(url_for('result', nde=nde))
+
+    elif nde == 'xrd':
+        # Query Forms
+        form = LuForm()
+
+        # Form choices from data
+        df = pd.DataFrame(data)
+        form.loading_amp.choices = [(v, v) for v in list(df['loading_amp'].unique())]
+        form.dist_from_center.choices = [(v, v) for v in [-90, -60, -40, -20, 0, 20, 40, 60, 90]]
+
+        if form.is_submitted():
+            session['nde'] = nde
+            session['loading_amp'] = form.loading_amp.data
+
+            session['exp_id'] = form.exp_id.data
+            if session['exp_id'] == '':
+                session['exp_id'] = str(list(df['id'].dropna().unique().astype(int))).strip('[]')
+            
+            session['dist_from_center'] = form.dist_from_center.data
             session['min_percent_fatigue_life'] = form.min_percent_fatigue_life.data
             session['max_percent_fatigue_life'] = form.max_percent_fatigue_life.data
             return redirect(url_for('result', nde=nde))
@@ -143,9 +165,9 @@ def result(nde):
         return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
     
     elif nde == 'lu':
-        position = session.get('position', None)
+        dist_from_center = session.get('dist_from_center', None)
 
-        data = db.list_lu(loading_amp=loading_amp, exp_id=exp_id, position=position,
+        data = db.list_lu(loading_amp=loading_amp, exp_id=exp_id, dist_from_center=dist_from_center,
                             min_percent_fatigue_life=min_percent_fatigue_life, 
                             max_percent_fatigue_life=max_percent_fatigue_life)
 
@@ -154,11 +176,11 @@ def result(nde):
         return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
     
     elif nde == 'nlu':
-        position = session.get('position', None)
+        dist_from_center = session.get('dist_from_center', None)
         nlu_amp = session.get('nlu_amp', None)
         
         data = db.list_nlu(loading_amp=loading_amp, exp_id=exp_id, 
-                            position=position, nlu_amp=nlu_amp,
+                            dist_from_center=dist_from_center, nlu_amp=nlu_amp,
                             min_percent_fatigue_life=min_percent_fatigue_life, 
                             max_percent_fatigue_life=max_percent_fatigue_life)
         fig_url = plot_nlu(data)
@@ -175,7 +197,7 @@ def files():
     if form.is_submitted():
         info = {'nde': form.nde.data, 'exp_id': form.exp_id.data,
                 'loading_amp': form.loading_amp.data, 'percent_fatigue_life': form.percent_fatigue_life.data,
-                'nlu_amp': form.nlu_amp.data, 'position': form.position.data}
+                'nlu_amp': form.nlu_amp.data, 'dist_from_center': form.dist_from_center.data}
 
         filename = naming_file(info)
 

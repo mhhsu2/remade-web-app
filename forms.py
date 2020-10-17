@@ -16,7 +16,7 @@ class IrAndAeForm(FlaskForm):
 class LuForm(FlaskForm):
     loading_amp = SelectMultipleField('Loading Amplidtude')
     exp_id = StringField('Exp. ID (optional)')
-    position = SelectMultipleField('Measuremnet Position')
+    dist_from_center = SelectMultipleField('Distance from Center (mm)')
     min_percent_fatigue_life = StringField('Mininum Fatigue Life (%)', default='0')
     max_percent_fatigue_life = StringField('Maximum Fatigue Life (%)', default='100')
     submit = SubmitField('Submit')
@@ -25,7 +25,7 @@ class NluForm(FlaskForm):
     loading_amp = SelectMultipleField('Loading Amplidtude')
     exp_id = StringField('Exp. ID (optional)')
     nlu_amp = SelectMultipleField('Measurement Amplitude')
-    position = SelectMultipleField('Measuremnet Position')
+    dist_from_center = SelectMultipleField('Distance from Center (mm)')
     min_percent_fatigue_life = StringField('Mininum Fatigue Life (%)', default='0')
     max_percent_fatigue_life = StringField('Maximum Fatigue Life (%)', default='100')
     submit = SubmitField('Submit')
@@ -35,8 +35,8 @@ class UploadForm(FlaskForm):
     exp_id = StringField('Exp. ID')
     loading_amp = StringField('Loading Amplitude')
     percent_fatigue_life = StringField('Fatigue Life (%)')
-    nlu_amp = StringField('Measurement Amplitude')
-    position = StringField('Measurement Position')
+    nlu_amp = StringField('Distance from Center (mm)')
+    dist_from_center = StringField('Measurement Position')
 
 
 

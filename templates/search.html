@@ -12,6 +12,8 @@
             Linear Ultrasound
     {% elif nde == 'nlu' %}
             Nonlinear Ultrasound
+    {% elif nde == 'xrd' %}
+            X-ray Diffraction
     {% endif %}    
 {% endblock section_title %}
 
@@ -37,14 +39,14 @@
         {% if nde == 'lu' %}
 
             <div class="col-md-3">
-                {{ form.position.label }} {{ form.position(class="custom-select") }}
+                {{ form.dist_from_center.label }} {{ form.dist_from_center(class="custom-select") }}
                 <small class="form-text text-muted">(Press ctrl, alt, to select multiple items)</small>
             </div>
 
         {% elif nde == 'nlu' %}
 
             <div class="col-md-3">
-                {{ form.position.label }} {{ form.position(class="custom-select") }}
+                {{ form.dist_from_center.label }} {{ form.dist_from_center(class="custom-select") }}
                 <small class="form-text text-muted">(Press ctrl, alt, to select multiple items)</small>
             </div>
 
@@ -52,6 +54,14 @@
                 {{ form.nlu_amp.label }} {{ form.nlu_amp(class="custom-select") }}
                 <small class="form-text text-muted">(Press ctrl, alt, to select multiple items)</small>
             </div>
+
+        {% elif nde == 'xrd' %}
+
+            <div class="col-md-3">
+                {{ form.dist_from_center.label }} {{ form.dist_from_center(class="custom-select") }}
+                <small class="form-text text-muted">(Press ctrl, alt, to select multiple items)</small>
+            </div>
+
         {% endif %}
 
         <div class="col-md-3">

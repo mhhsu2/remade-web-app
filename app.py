@@ -12,17 +12,12 @@ import boto3
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'my key values'
 
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     db = Database()
     data = db.list_exp_info()
 
     return render_template('exp_info.html', data=data)
-
-@app.errorhandler(500)
-def internal_error(error):
-    return render_template('error_pages/500.html'), 500
 
 @app.route('/search/<nde>', methods=['GET', 'POST'])
 def search(nde):
@@ -169,11 +164,6 @@ def result(nde):
         fig_url = plot_nlu(data)
         return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
 
-@app.after_request
-def after_request(response):
-	response.headers["Cache-Control"] = "no-store"
-	return response
-
 @app.route('/files', methods=['GET', 'POST'])
 def files():
     s3_resource = boto3.resource('s3')
@@ -220,6 +210,14 @@ def download():
         headers={"Content-Disposition": "attachment;filename={}".format(key)}
     )
 
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('error_pages/500.html'), 500
+
+@app.after_request
+def after_request(response):
+	response.headers["Cache-Control"] = "no-store"
+	return response
 
 if __name__ == '__main__':
     app.run(debug=True)

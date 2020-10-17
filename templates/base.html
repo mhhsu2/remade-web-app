@@ -56,11 +56,8 @@
             <a class="dropdown-item" href="{{ url_for('search', nde='ae') }}">Acoustic Emission</a>
             <a class="dropdown-item" href="{{ url_for('search', nde='lu') }}">Linear Ultrasound</a>
             <a class="dropdown-item" href="{{ url_for('search', nde='nlu') }}">Nonlinear Ultrasound</a>
+            <a class="dropdown-item" href="{{ url_for('search', nde='xrd') }}">X-ray Diffraction</a>
           </div>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#">Model</a>
         </li>
 
         <li class="nav-item">
@@ -116,6 +113,13 @@
               </a>
             </li>
 
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('search', nde='xrd') }}">
+                <span data-feather="search"></span>
+                X-ray Diffraction
+              </a>
+            </li>
+
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-1 text-muted">
               <span>Upload</span>
             </h6>
@@ -163,7 +167,8 @@
       "<'row'<'col-md-5'i><'col-md-7'p>>",
     buttons: [
       'csv'
-    ]
+    ],
+    pageLength: 50
   });
   } );
 </script>

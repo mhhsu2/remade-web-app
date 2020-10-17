@@ -8,8 +8,8 @@
 {% endblock section_title %}
 
 {% block description %}
-    <p>The table below shows the information of conducted experiments and their available Non-Destructive Evulation (NDE) data.</p>
-    <p>To search specific NDE data, please go to the search pages. </p>
+    <p>The table below shows all the experiment records.</p>
+    <p>To search specific data, please go to the search pages. </p>
 {% endblock description %}
 
 {% block content %}
@@ -36,38 +36,45 @@
                 <th>Acoustic Emission</th>
                 <th>Linear Ultrasound</th>
                 <th>Nonlinear Utrasound</th>
+                <th>X-ray Diffraction</th>
             </tr>
         </thead>
 
         <tbody>
             {% for row in data %}
             <tr>
-                <td>{{ row['id'] }}</td>
+                <td>{{ row['exp_id'] }}</td>
                 <td>{{ row['loading_amp'] }}</td>
-                <td>{{ row['percent_fatigue_life' ]}}</td>
+                <td>{{ row['max_percent_fatigue_life']}}</td>
                 
-                {% if row['IR'] == 'Yes' %}
-                    <td><a href="{{ url_for('search', nde='ir') }}">{{ row['IR'] }}</a></td>
+                {% if row['ir'] == 'Yes' %}
+                    <td><a href="{{ url_for('search', nde='ir') }}">{{ row['ir'] }}</a></td>
                 {% else %}
-                    <td>{{ row['IR'] }}</td>
+                    <td>{{ row['ir'] }}</td>
                 {% endif %}
 
-                {% if row['AE'] == 'Yes' %}
-                <td><a href="{{ url_for('search', nde='ae') }}">{{ row['AE'] }}</a></td>
+                {% if row['ae'] == 'Yes' %}
+                <td><a href="{{ url_for('search', nde='ae') }}">{{ row['ae'] }}</a></td>
                 {% else %}
-                    <td>{{ row['AE'] }}</td>
+                    <td>{{ row['ae'] }}</td>
                 {% endif %}
                 
-                {% if row['LU'] == 'Yes' %}
-                    <td><a href="{{ url_for('search', nde='lu') }}">{{ row['LU'] }}</a></td>
+                {% if row['lu'] == 'Yes' %}
+                    <td><a href="{{ url_for('search', nde='lu') }}">{{ row['lu'] }}</a></td>
                 {% else %}
-                    <td>{{ row['LU'] }}</td>
+                    <td>{{ row['lu'] }}</td>
                 {% endif %}
 
-                {% if row['NLU'] == 'Yes' %}
-                    <td><a href="{{ url_for('search', nde='nlu') }}">{{ row['NLU'] }}</a></td>
+                {% if row['nlu'] == 'Yes' %}
+                    <td><a href="{{ url_for('search', nde='nlu') }}">{{ row['nlu'] }}</a></td>
                 {% else %}
-                    <td>{{ row['NLU'] }}</td>
+                    <td>{{ row['nlu'] }}</td>
+                {% endif %}
+
+                {% if row['xrd'] == 'Yes' %}
+                    <td><a href="{{ url_for('search', nde='xrd') }}">{{ row['xrd'] }}</a></td>
+                {% else %}
+                    <td>{{ row['xrd'] }}</td>
                 {% endif %}
             </tr> 
             

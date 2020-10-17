@@ -15,7 +15,18 @@ class Database:
         self.cur = self.con.cursor()
 
     def list_exp_info(self):
-        self.cur.execute("SELECT * from exp_info")
+        query = """
+                    SELECT exp_id,
+                           loading_amp,
+                           FORMAT(max_percent_fatigue_life, 2) AS max_percent_fatigue_life,
+                           ir,
+                           ae,
+                           lu,
+                           nlu,
+                           xrd
+                    FROM exp_info
+                """
+        self.cur.execute(query)
         result = self.cur.fetchall()
         return result
 

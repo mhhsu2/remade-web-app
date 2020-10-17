@@ -133,3 +133,4 @@ dmypy.json
 
 # MySQL DB info
 mysql_db
+.credentials

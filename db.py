@@ -1,11 +1,15 @@
 import pymysql
+import yaml
+import os
 
 class Database:
     def __init__(self):
-        host = "us-cdbr-iron-east-05.cleardb.net"
-        user = "bd0f9e1a785f73"
-        password = "6689fecc"
-        db = "heroku_ac7907a61866dc6"
+        CREDENTIAL_DIR = '.credentials'
+        db_crediential = yaml.load(open(os.path.join(CREDENTIAL_DIR, 'db.yaml')), Loader=yaml.FullLoader)
+        host = db_crediential['mysql_host']
+        user = db_crediential['mysql_user']
+        password = db_crediential['mysql_password']
+        db = db_crediential['mysql_db']
         self.con = pymysql.connect(host=host, user=user, password=password, db=db, cursorclass=pymysql.cursors.
                                    DictCursor)
         self.cur = self.con.cursor()
@@ -98,3 +102,8 @@ class Database:
         self.cur.execute(query)
         result= self.cur.fetchall()
         return result
+
+if __name__ == "__main__":
+    # Test the db connection
+    db = Database()
+    print(f"Connected: {db.con.open}")

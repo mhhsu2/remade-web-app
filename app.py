@@ -29,16 +29,22 @@ def search(nde):
         form = IrAndAeForm()
 
         # Form choices from data
+        LOADING_AMP_CHOICES = [11.7, 12.7, 14.7]
         df = pd.DataFrame(data)
-        form.loading_amp.choices = [(v, v) for v in list(df['loading_amp'].unique())]
+        form.loading_amp.choices = [(v, v) for v in LOADING_AMP_CHOICES]
 
         if form.is_submitted():
             session['nde'] = nde
-            session['loading_amp'] = form.loading_amp.data
 
-            session['exp_id'] = form.exp_id.data
-            if session['exp_id'] == '':
-                session['exp_id'] = str(list(df['id'].dropna().unique().astype(int))).strip('[]')
+            if form.loading_amp.data != []:
+                session['loading_amp'] = form.loading_amp.data
+            else: 
+                session['loading_amp'] = [str(v) for v in LOADING_AMP_CHOICES] 
+            
+            if form.exp_id.data != '':
+                session['exp_id'] = form.exp_id.data
+            else:
+                session['exp_id'] = str(list(df['exp_id'].dropna().unique().astype(int))).strip('[]')
 
             session['min_percent_fatigue_life'] = form.min_percent_fatigue_life.data
             session['max_percent_fatigue_life'] = form.max_percent_fatigue_life.data
@@ -50,7 +56,7 @@ def search(nde):
 
         # Form choices from data
         df = pd.DataFrame(data)
-        form.loading_amp.choices = [(v, v) for v in list(df['loading_amp'].unique())]
+        form.loading_amp.choices = [(v, v) for v in [11.7, 12.7, 14.7]]
 
 
         if form.is_submitted():
@@ -59,7 +65,7 @@ def search(nde):
 
             session['exp_id'] = form.exp_id.data
             if session['exp_id'] == '':
-                session['exp_id'] = str(list(df['id'].dropna().unique().astype(int))).strip('[]')
+                session['exp_id'] = str(list(df['exp_id'].dropna().unique().astype(int))).strip('[]')
 
             session['min_percent_fatigue_life'] = form.min_percent_fatigue_life.data
             session['max_percent_fatigue_life'] = form.max_percent_fatigue_life.data
@@ -80,7 +86,7 @@ def search(nde):
 
             session['exp_id'] = form.exp_id.data
             if session['exp_id'] == '':
-                session['exp_id'] = str(list(df['id'].dropna().unique().astype(int))).strip('[]')
+                session['exp_id'] = str(list(df['exp_id'].dropna().unique().astype(int))).strip('[]')
             
             session['dist_from_center'] = form.dist_from_center.data
             session['min_percent_fatigue_life'] = form.min_percent_fatigue_life.data
@@ -103,7 +109,7 @@ def search(nde):
 
             session['exp_id'] = form.exp_id.data
             if session['exp_id'] == '':
-                session['exp_id'] = str(list(df['id'].dropna().unique().astype(int))).strip('[]')
+                session['exp_id'] = str(list(df['exp_id'].dropna().unique().astype(int))).strip('[]')
             
             session['dist_from_center'] = form.dist_from_center.data
             session['nlu_amp'] = form.nlu_amp.data
@@ -126,7 +132,7 @@ def search(nde):
 
             session['exp_id'] = form.exp_id.data
             if session['exp_id'] == '':
-                session['exp_id'] = str(list(df['id'].dropna().unique().astype(int))).strip('[]')
+                session['exp_id'] = str(list(df['exp_id'].dropna().unique().astype(int))).strip('[]')
             
             session['dist_from_center'] = form.dist_from_center.data
             session['min_percent_fatigue_life'] = form.min_percent_fatigue_life.data
@@ -183,6 +189,7 @@ def result(nde):
                             dist_from_center=dist_from_center, nlu_amp=nlu_amp,
                             min_percent_fatigue_life=min_percent_fatigue_life, 
                             max_percent_fatigue_life=max_percent_fatigue_life)
+                            
         fig_url = plot_nlu(data)
         return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
 
@@ -207,9 +214,6 @@ def files():
         my_bucket.Object(filename).put(Body=file)
         data = my_bucket.Object(filename).get()['Body']
         df = pd.read_csv(data)
-
-
-        print(df)
 
         flash('File uploaded successfully')
         return redirect(url_for('files'))

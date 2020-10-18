@@ -13,6 +13,23 @@ from decimal import Decimal
 # Solve matplotlib error when using flask app
 plt.switch_backend('Agg')
 
+dash_styles = ["",
+               (4, 1.5),
+               (1, 1),
+               (3, 1, 1.5, 1),
+               (5, 1, 1, 1),
+               (5, 1, 2, 1, 2, 1),
+               (2, 2, 3, 1.5),
+               (1, 2.5, 3, 1.2),
+               (3, 2, 4, 1.0),
+               (1, 2, 3.5, 1.1),
+               (4, 1, 1, 1),
+               (4, 2, 1, 1),
+               (4, 2, 2, 1),
+               (4, 3, 3, 1.1),
+               (5, 1, 4, 2, 3, 1),
+               (5, 2, 3, 2, 2, 1.1)]
+markers = ('o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd', 'P', 'X')
 # Infrared Camera
 def plot_ir(data):
     
@@ -31,7 +48,7 @@ def plot_ir(data):
     palette = sns.color_palette("bright", len(df['loading_amp'].unique()))
   
     g = sns.lineplot(x='percent_fatigue_life', y='temperature', hue='loading_amp', style='exp_id',
-                    markers=True, dashes=False, markeredgecolor=None, markersize=3,
+                    markers=markers, dashes=dash_styles, markeredgecolor=None, markersize=3,
                     palette=palette, data=df)
 
     g.set_xlim([0,100])
@@ -132,7 +149,7 @@ def plot_lu(data):
 
     plt.figure(figsize=(15,6))
     g = sns.FacetGrid(data=df, hue='loading_amp', height=4)
-    g.map(sns.regplot, 'percent_fatigue_life', 'avg_wave_speed',  ci=None)
+    g.map(sns.regplot, 'percent_fatigue_life', 'wave_speed',  ci=None)
 
     g.add_legend(bbox_to_anchor=(1.2,0.5))
     g.set_ylabels('Wave Speed (m/s)')

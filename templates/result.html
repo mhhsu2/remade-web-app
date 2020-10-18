@@ -13,6 +13,8 @@
             Linear Ultrasound
     {% elif nde == 'nlu' %}
             Nonlinear Ultrasound
+    {% elif nde == 'xrd' %}
+            X-ray Diffraction
     {% endif %}    
 {% endblock section_title %}
 
@@ -39,17 +41,17 @@
             <th>#</th>
             <th>Exp. ID</th>
             <th>Loading Amplitude</th>
-            <th>Percent of Fatigue Life</th>
+            <th>Fatigue Life (%)</th>
             
             {% if nde == 'ir' %}
 
                 <th>Cycles</th>
-                <th>Temperature ()</th>
+                <th>Temperature (C)</th>
 
             {% elif nde == 'ae' %}
 
                 <th>Cycles</th>
-                <th>Average AE Hits</th>
+                <th>AE Hits</th>
                 
             {% elif nde == 'lu' %}
 
@@ -58,6 +60,11 @@
             {% elif nde == 'nlu' %}
 
                 <th>Acoustic Nonlinear Paramter</th>
+
+            {% elif nde == 'xrd' %}
+
+                <th>Residual Stress (MPa)</th>
+                <th>Full Width at Half Maximum</th>
 
             {% endif %}
             
@@ -70,7 +77,7 @@
             <td>{{ loop.index }}</td>
             <td>{{ row['exp_id'] }}</td>
             <td>{{ row['loading_amp'] }}</td>
-            <td>{{ row['percent_fatigue_life' ]}}</td>
+            <td>{{ row['percent_fatigue_life']}}</td>
 
             {% if nde == 'ir' %}
 
@@ -81,7 +88,7 @@
             {% elif nde == 'ae' %}
 
                 <td>{{ row['cycles'] }}</td>
-                <td>{{ row['avg_ae_hits'] }}</td>  
+                <td>{{ row['ae_hits'] }}</td>  
                 
             {% elif nde == 'lu' %}
 
@@ -90,6 +97,11 @@
             {% elif nde == 'nlu' %}
 
                 <td>{{ row['beta'] }}</td>
+
+            {% elif nde == 'xrd' %}
+
+                <td>{{ row['residual_stress'] }}</td>
+                <td>{{ row['fwhm'] }}</td>
 
             {% endif %}
 

@@ -13,6 +13,7 @@ from decimal import Decimal
 # Solve matplotlib error when using flask app
 plt.switch_backend('Agg')
 
+# Create more seaborn markers and styles
 dash_styles = ["",
                (4, 1.5),
                (1, 1),
@@ -30,6 +31,7 @@ dash_styles = ["",
                (5, 1, 4, 2, 3, 1),
                (5, 2, 3, 2, 2, 1.1)]
 markers = ('o', 'v', '^', '<', '>', '8', 's', 'p', '*', 'h', 'H', 'D', 'd', 'P', 'X')
+
 # Infrared Camera
 def plot_ir(data):
     
@@ -47,11 +49,11 @@ def plot_ir(data):
     plt.figure(figsize=(15,6))
     palette = sns.color_palette("bright", len(df['loading_amp'].unique()))
   
-    g = sns.lineplot(x='percent_fatigue_life', y='temperature', hue='loading_amp', style='exp_id',
+    g = sns.lineplot(x='cycles', y='temperature', hue='loading_amp', style='exp_id',
                     markers=markers, dashes=dash_styles, markeredgecolor=None, markersize=3,
                     palette=palette, data=df)
 
-    g.set_xlim([0,100])
+    # g.set_xlim([0,100])
 
     g.set_title("""Infrared Camera\nLoading Amplitude: {}\nExp. ID: {}\nRange of Fatigue Life: {}~{}
                 """.format(
@@ -61,7 +63,7 @@ def plot_ir(data):
                     max_percent_fatigue_life,
                     fontsize=24, fontweight='bold'))
 
-    g.set_xlabel('Fatigue Life (%)', fontsize=14)
+    g.set_xlabel('Cycle', fontsize=14)
     g.set_ylabel('Temperature (ºC)', fontsize=14)
 
     g.legend().set_bbox_to_anchor([1.12,1])
@@ -105,11 +107,11 @@ def plot_ae(data):
     plt.figure(figsize=(15,6))
     palette = sns.color_palette("bright", len(df['loading_amp'].unique()))
   
-    g = sns.lineplot(x='percent_fatigue_life', y='avg_ae_hits', hue='loading_amp', style='exp_id',
+    g = sns.lineplot(x='cycles', y='ae_hits', hue='loading_amp', style='exp_id',
                     markers=True, dashes=False, markeredgecolor=None, markersize=3,
                     palette=palette, data=df)
 
-    g.set_xlim([0,100])
+    # g.set_xlim([0,100])
 
     g.set_title("""Infrared Camera\nLoading Amplitude: {}\nExp. ID: {}\nRange of Fatigue Life: {}~{}
                 """.format(
@@ -119,7 +121,7 @@ def plot_ae(data):
                     max_percent_fatigue_life,
                     fontsize=24, fontweight='bold'))
 
-    g.set_xlabel('Fatigue Life (%)', fontsize=14)
+    g.set_xlabel('Cycle', fontsize=14)
     g.set_ylabel('Average AE Hits (per 100 sec)', fontsize=14)
 
     g.legend().set_bbox_to_anchor([1.12,1])
@@ -145,15 +147,25 @@ def plot_ae(data):
 def plot_lu(data):
     
     df = pd.DataFrame(data)
+
+    # Change columns type for plotting
     df = df.apply(pd.to_numeric, errors='ignore')
 
-    plt.figure(figsize=(15,6))
-    g = sns.FacetGrid(data=df, hue='loading_amp', height=4)
-    g.map(sns.regplot, 'percent_fatigue_life', 'wave_speed',  ci=None)
+    # TODO: Not working. data type not understood
+    # numerical_cols = ['wave_speed', 'percent_fatigue_life']
+    # for col in df.columns:
+    #     if col not in numerical_cols:
+    #         df[col] = df[col].astype('category')
 
-    g.add_legend(bbox_to_anchor=(1.2,0.5))
-    g.set_ylabels('Wave Speed (m/s)')
-    g.set_xlabels('Fatigue Life (%)')
+    # Plot
+    _, ax = plt.subplots(figsize=(16, 10))
+    sns.lineplot(data=df, x='dist_from_center', y='wave_speed',
+                 hue='loading_amp', style='percent_fatigue_life',
+                 markers=True, ax=ax)
+
+    ax.legend(bbox_to_anchor=(1.2,1))
+    ax.set_ylabel('Wave Speed (m/s)')
+    ax.set_xlabel('Distance from Center (mm)')
     plt.tight_layout()
 
     # Save result to temp.png
@@ -173,13 +185,15 @@ def plot_nlu(data):
     df = pd.DataFrame(data)
     df = df.apply(pd.to_numeric, errors='ignore')
 
-    plt.figure(figsize=(15,6))
-    g = sns.FacetGrid(data=df, hue='loading_amp', height=4)
-    g.map(sns.regplot, 'percent_fatigue_life', 'beta',  ci=None)
+    # Plot
+    _, ax = plt.subplots(figsize=(16, 10))
+    sns.lineplot(data=df, x='dist_from_center', y='acoustic_parameter',
+                 hue='loading_amp', style='percent_fatigue_life',
+                 markers=True, ax=ax)
 
-    g.add_legend(bbox_to_anchor=(1.2,0.5))
-    g.set_ylabels('Acoustic Nonliear Parameter')
-    g.set_xlabels('Fatigue Life (%)')
+    ax.legend(bbox_to_anchor=(1.2,1))
+    ax.set_ylabel('Wave Speed (m/s)')
+    ax.set_xlabel('Distance from Center (mm)')
     plt.tight_layout()
 
     # Save result to temp.png

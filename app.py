@@ -55,16 +55,21 @@ def search(nde):
         form = IrAndAeForm()
 
         # Form choices from data
+        LOADING_AMP_CHOICES = [11.7, 12.7, 14.7]
         df = pd.DataFrame(data)
-        form.loading_amp.choices = [(v, v) for v in [11.7, 12.7, 14.7]]
-
+        form.loading_amp.choices = [(v, v) for v in LOADING_AMP_CHOICES]
 
         if form.is_submitted():
             session['nde'] = nde
-            session['loading_amp'] = form.loading_amp.data
 
-            session['exp_id'] = form.exp_id.data
-            if session['exp_id'] == '':
+            if form.loading_amp.data != []:
+                session['loading_amp'] = form.loading_amp.data
+            else: 
+                session['loading_amp'] = [str(v) for v in LOADING_AMP_CHOICES] 
+            
+            if form.exp_id.data != '':
+                session['exp_id'] = form.exp_id.data
+            else:
                 session['exp_id'] = str(list(df['exp_id'].dropna().unique().astype(int))).strip('[]')
 
             session['min_percent_fatigue_life'] = form.min_percent_fatigue_life.data

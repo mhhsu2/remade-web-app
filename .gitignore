@@ -134,3 +134,6 @@ dmypy.json
 # MySQL DB info
 mysql_db
 .credentials
+
+# Test stuff
+test*

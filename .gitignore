@@ -135,5 +135,8 @@ dmypy.json
 mysql_db
 .credentials
 
+# Temp fig
+**/fig
+
 # Test stuff
 test*

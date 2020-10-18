@@ -31,7 +31,11 @@ class NluForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class UploadForm(FlaskForm):
-    nde = RadioField('NDE Method', choices=[('ir', 'Infrared Camera'), ('ae', 'Acoustic Emission'), ('lu', 'Linear Ultrasound'), ('nlu', 'Nonlinear Ultrasound')])
+    nde = RadioField('NDE Method', choices=[('ir', 'Infrared Camera'), 
+                                            ('ae', 'Acoustic Emission'),
+                                            ('lu', 'Linear Ultrasound'),
+                                            ('nlu', 'Nonlinear Ultrasound'),
+                                            ('xrd', 'X-ray Diffraction')])
     exp_id = StringField('Exp. ID')
     loading_amp = StringField('Loading Amplitude')
     percent_fatigue_life = StringField('Fatigue Life (%)')

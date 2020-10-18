@@ -3,7 +3,7 @@ from flask import Flask, redirect, render_template, request, session, url_for, f
 
 from db import Database
 from forms import IrAndAeForm, LuForm, NluForm, UploadForm
-from figure import plot_ir, plot_ae, plot_lu, plot_nlu
+from plotly_figure import plotly_ir, plotly_ae, plotly_lu, plotly_nlu, plotly_xrd
 
 from utils import naming_file
 
@@ -18,6 +18,10 @@ def index():
     data = db.list_exp_info()
 
     return render_template('exp_info.html', data=data)
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('error_pages/500.html'), 500
 
 @app.route('/search/<nde>', methods=['GET', 'POST'])
 def search(nde):
@@ -81,19 +85,31 @@ def search(nde):
         form = LuForm()
 
         # Form choices from data
+        LOADING_AMP_CHOICES = [0.0, 11.7, 12.7, 14.7]
+        POSITION_CHOICES = [-90, -60, -40, -20, 0, 20, 40, 60, 90]
         df = pd.DataFrame(data)
-        form.loading_amp.choices = [(v, v) for v in list(df['loading_amp'].unique())]
-        form.dist_from_center.choices = [(v, v) for v in [-90, -60, -40, -20, 0, 20, 40, 60, 90]]
+        form.loading_amp.choices = [(v, v) for v in LOADING_AMP_CHOICES]
+        form.dist_from_center.choices = [(v, v) for v in POSITION_CHOICES]
 
         if form.is_submitted():
             session['nde'] = nde
             session['loading_amp'] = form.loading_amp.data
 
-            session['exp_id'] = form.exp_id.data
-            if session['exp_id'] == '':
-                session['exp_id'] = str(list(df['exp_id'].dropna().unique().astype(int))).strip('[]')
+            if form.loading_amp.data != []:
+                session['loading_amp'] = form.loading_amp.data
+            else: 
+                session['loading_amp'] = [str(v) for v in LOADING_AMP_CHOICES] 
+
+            if form.dist_from_center.data != []:
+                session['dist_from_center'] = form.dist_from_center.data
+            else:
+                session['dist_from_center'] = [str(v) for v in POSITION_CHOICES] 
             
-            session['dist_from_center'] = form.dist_from_center.data
+            if form.exp_id.data != '':
+                session['exp_id'] = form.exp_id.data
+            else:
+                session['exp_id'] = str(list(df['exp_id'].dropna().unique().astype(int))).strip('[]')
+
             session['min_percent_fatigue_life'] = form.min_percent_fatigue_life.data
             session['max_percent_fatigue_life'] = form.max_percent_fatigue_life.data
             return redirect(url_for('result', nde=nde))
@@ -102,22 +118,38 @@ def search(nde):
         # Query Forms
         form = NluForm()
 
-        # Form choices from data
+        # Form choices from data       
+        LOADING_AMP_CHOICES = [0.0, 11.7, 12.7, 14.7]
+        POSITION_CHOICES = [-90, -60, -40, -20, 0, 20, 40, 60, 90]
         df = pd.DataFrame(data)
-        form.loading_amp.choices = [(v, v) for v in list(df['loading_amp'].unique())]
-        form.dist_from_center.choices = [(v, v) for v in [-90, -60, -40, -20, 0, 20, 40, 60, 90]]
+        form.loading_amp.choices = [(v, v) for v in LOADING_AMP_CHOICES]
+        form.dist_from_center.choices = [(v, v) for v in POSITION_CHOICES]
         form.nlu_amp.choices = [(v, v) for v in range(1,12)]
 
         if form.is_submitted():
             session['nde'] = nde
             session['loading_amp'] = form.loading_amp.data
 
-            session['exp_id'] = form.exp_id.data
-            if session['exp_id'] == '':
+            if form.loading_amp.data != []:
+                session['loading_amp'] = form.loading_amp.data
+            else: 
+                session['loading_amp'] = [str(v) for v in LOADING_AMP_CHOICES] 
+
+            if form.dist_from_center.data != []:
+                session['dist_from_center'] = form.dist_from_center.data
+            else:
+                session['dist_from_center'] = [str(v) for v in POSITION_CHOICES] 
+
+            if form.nlu_amp.data != []:
+                session['nlu_amp'] = form.nlu_amp.data
+            else:
+                session['nlu_amp'] = [str(v) for v in range(1,12)]
+
+            if form.exp_id.data != '':
+                session['exp_id'] = form.exp_id.data
+            else:
                 session['exp_id'] = str(list(df['exp_id'].dropna().unique().astype(int))).strip('[]')
-            
-            session['dist_from_center'] = form.dist_from_center.data
-            session['nlu_amp'] = form.nlu_amp.data
+
             session['min_percent_fatigue_life'] = form.min_percent_fatigue_life.data
             session['max_percent_fatigue_life'] = form.max_percent_fatigue_life.data
             return redirect(url_for('result', nde=nde))
@@ -127,19 +159,31 @@ def search(nde):
         form = LuForm()
 
         # Form choices from data
+        LOADING_AMP_CHOICES = [0.0, 11.7, 12.7, 14.7]
+        POSITION_CHOICES = [0, 20, 40]
         df = pd.DataFrame(data)
-        form.loading_amp.choices = [(v, v) for v in list(df['loading_amp'].unique())]
-        form.dist_from_center.choices = [(v, v) for v in [-90, -60, -40, -20, 0, 20, 40, 60, 90]]
+        form.loading_amp.choices = [(v, v) for v in LOADING_AMP_CHOICES]
+        form.dist_from_center.choices = [(v, v) for v in POSITION_CHOICES]
 
         if form.is_submitted():
             session['nde'] = nde
             session['loading_amp'] = form.loading_amp.data
 
-            session['exp_id'] = form.exp_id.data
-            if session['exp_id'] == '':
-                session['exp_id'] = str(list(df['exp_id'].dropna().unique().astype(int))).strip('[]')
+            if form.loading_amp.data != []:
+                session['loading_amp'] = form.loading_amp.data
+            else: 
+                session['loading_amp'] = [str(v) for v in LOADING_AMP_CHOICES] 
+
+            if form.dist_from_center.data != []:
+                session['dist_from_center'] = form.dist_from_center.data
+            else:
+                session['dist_from_center'] = [str(v) for v in POSITION_CHOICES] 
             
-            session['dist_from_center'] = form.dist_from_center.data
+            if form.exp_id.data != '':
+                session['exp_id'] = form.exp_id.data
+            else:
+                session['exp_id'] = str(list(df['exp_id'].dropna().unique().astype(int))).strip('[]')
+
             session['min_percent_fatigue_life'] = form.min_percent_fatigue_life.data
             session['max_percent_fatigue_life'] = form.max_percent_fatigue_life.data
             return redirect(url_for('result', nde=nde))
@@ -162,18 +206,18 @@ def result(nde):
                             max_percent_fatigue_life=max_percent_fatigue_life)
         
         # Plot figure
-        fig_url = plot_ir(data)
+        graphJSON = plotly_ir(data)
 
-        return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
+        return render_template('result.html', data=data, nde=nde, graphJSON=graphJSON)
     
     elif nde == 'ae':
         data = db.list_ae(loading_amp=loading_amp, exp_id=exp_id, 
                             min_percent_fatigue_life=min_percent_fatigue_life, 
                             max_percent_fatigue_life=max_percent_fatigue_life)
 
-        fig_url = plot_ae(data)
+        graphJSON = plotly_ae(data)
 
-        return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
+        return render_template('result.html', data=data, nde=nde, graphJSON=graphJSON)
     
     elif nde == 'lu':
         dist_from_center = session.get('dist_from_center', None)
@@ -182,9 +226,10 @@ def result(nde):
                             min_percent_fatigue_life=min_percent_fatigue_life, 
                             max_percent_fatigue_life=max_percent_fatigue_life)
 
-        fig_url = plot_lu(data)
+        # Plot figure with Plotly
+        graphJSON = plotly_lu(data)
 
-        return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
+        return render_template('result.html', data=data, nde=nde, graphJSON=graphJSON)
     
     elif nde == 'nlu':
         dist_from_center = session.get('dist_from_center', None)
@@ -195,8 +240,22 @@ def result(nde):
                             min_percent_fatigue_life=min_percent_fatigue_life, 
                             max_percent_fatigue_life=max_percent_fatigue_life)
                             
-        fig_url = plot_nlu(data)
-        return render_template('result.html', data=data, nde=nde, fig_url=fig_url)
+        # Plot figure with Plotly
+        graphJSON = plotly_nlu(data)
+
+        return render_template('result.html', data=data, nde=nde, graphJSON=graphJSON)
+
+    elif nde == 'xrd':
+        dist_from_center = session.get('dist_from_center', None)
+
+        data = db.list_xrd(loading_amp=loading_amp, exp_id=exp_id, dist_from_center=dist_from_center,
+                            min_percent_fatigue_life=min_percent_fatigue_life, 
+                            max_percent_fatigue_life=max_percent_fatigue_life)
+
+        # Plot figure with Plotly
+        graphJSON, graphJSON2 = plotly_xrd(data)
+
+        return render_template('result.html', data=data, nde=nde, graphJSON=graphJSON, graphJSON2=graphJSON2)
 
 @app.route('/files', methods=['GET', 'POST'])
 def files():
@@ -218,7 +277,6 @@ def files():
         my_bucket = s3_resource.Bucket('remade-nde')
         my_bucket.Object(filename).put(Body=file)
         data = my_bucket.Object(filename).get()['Body']
-        df = pd.read_csv(data)
 
         flash('File uploaded successfully')
         return redirect(url_for('files'))
@@ -240,10 +298,6 @@ def download():
         mimetype='text/csv',
         headers={"Content-Disposition": "attachment;filename={}".format(key)}
     )
-
-@app.errorhandler(500)
-def internal_error(error):
-    return render_template('error_pages/500.html'), 500
 
 @app.after_request
 def after_request(response):

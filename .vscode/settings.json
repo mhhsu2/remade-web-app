@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/anaconda3/envs/MyFlask/bin/python"
+    "python.pythonPath": "/anaconda3/envs/MyFlask/bin/python",
+    "html.validate.scripts": false
 }

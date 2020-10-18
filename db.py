@@ -84,8 +84,7 @@ class Database:
                         AND exp_id IN ({})
                         AND dist_from_center IN ({})
                         AND percent_fatigue_life BETWEEN {}/100 AND {}/100;
-                """.format(amp, exp_id, pos, min_percent_fatigue_life, max_percent_fatigue_life) 
-        print(query)      
+                """.format(amp, exp_id, pos, min_percent_fatigue_life, max_percent_fatigue_life)      
         self.cur.execute(query)
         result= self.cur.fetchall()
         return result

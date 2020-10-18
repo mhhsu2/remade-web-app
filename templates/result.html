@@ -22,11 +22,32 @@
 <div class="container-fluid">
     
     <h3>Figure</h3>
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <img src="{{ url_for('static', filename= fig_url) }}" alt=""  class="img-fluid" style="Max-width: 80%">
-        </div>
+    <div class="row" id="graph">
+        <!-- div for putting graph -->
     </div>
+    <!-- Display plotly graphJSON from backend -->
+
+    <script type="text/javascript">
+        var graphs = {{ graphJSON|safe }};
+        Plotly.plot("graph",
+            graphs.data,
+            graphs.layout || {});
+    </script>
+
+    <!-- Extra plots for XRD result -->
+    {% if nde == 'xrd'  %}
+        <div class="row" id="graph-2">
+            <!-- div for putting graph -->
+        </div>
+
+        <script type="text/javascript">
+            var graphs = {{ graphJSON2|safe }};
+            Plotly.plot("graph-2",
+                graphs.data,
+                graphs.layout || {});
+        </script>
+    {% endif %}
+    
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-1 mb-1">
 

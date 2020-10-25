@@ -1,10 +1,9 @@
 import pandas as pd
 from flask import Flask, redirect, render_template, request, session, url_for, flash, Response
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_login import UserMixin, LoginManager, login_user, logout_user, login_required, current_user
 
 from db import Database
 from forms import IrAndAeForm, LuForm, NluForm, UploadForm
-from user import User
 from plotly_figure import plotly_ir, plotly_ae, plotly_lu, plotly_nlu, plotly_xrd
 
 from utils import naming_file
@@ -308,6 +307,10 @@ def download():
     )
 
 # User login
+# TODO: Move to individual file
+class User(UserMixin):
+    pass
+
 @login_manager.user_loader
 def user_loader(user_id):
     db = Database()

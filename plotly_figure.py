@@ -12,7 +12,6 @@ def plotly_ir(data):
     numerical_cols = ['temperature', 'cycles', 'percent_fatigue_life']
     for col in df.columns:
         if col not in numerical_cols:
-            print(col)
             df[col] = df[col].astype('category')
 
 
@@ -42,7 +41,6 @@ def plotly_ae(data):
     numerical_cols = ['ae_hits', 'cycles', 'percent_fatigue_life']
     for col in df.columns:
         if col not in numerical_cols:
-            print(col)
             df[col] = df[col].astype('category')
 
 

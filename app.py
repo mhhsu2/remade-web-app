@@ -1,8 +1,10 @@
 import pandas as pd
 from flask import Flask, redirect, render_template, request, session, url_for, flash, Response
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 from db import Database
 from forms import IrAndAeForm, LuForm, NluForm, UploadForm
+from user import User
 from plotly_figure import plotly_ir, plotly_ae, plotly_lu, plotly_nlu, plotly_xrd
 
 from utils import naming_file
@@ -12,7 +14,13 @@ import boto3
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'my key values'
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+
 @app.route('/', methods=['GET', 'POST'])
+@login_required
 def index():
     db = Database()
     data = db.list_exp_info()
@@ -299,6 +307,43 @@ def download():
         headers={"Content-Disposition": "attachment;filename={}".format(key)}
     )
 
+# User login
+@login_manager.user_loader
+def user_loader(user_id):
+    users = {'Me': {'password': 'myself'}}
+    if user_id not in users:
+        return
+
+    user = User()
+    user.id = user_id
+    return user
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template("login.html")
+
+    user_id = request.form['user_id']
+    password = request.form['password']
+    users = {'Me': {'password': 'myself'}}
+    if (user_id in users) and (password == users[user_id]['password']):
+        user = User()
+        user.id = user_id
+        login_user(user)
+        return redirect(url_for('index'))
+    
+    return render_template('login.html')
+
+@app.route("/logout", methods=["GET"])
+@login_required
+def logout():
+    """Logout the current user."""
+    user = current_user
+    user.authenticated = False
+    logout_user()
+    return render_template("login.html")
+
+# Miscellaneous 
 @app.after_request
 def after_request(response):
 	response.headers["Cache-Control"] = "no-store"

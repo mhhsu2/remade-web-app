@@ -135,6 +135,26 @@ class Database:
         self.cur.execute(query)
         result= self.cur.fetchall()
         return result
+        
+
+    def get_user_ids(self):
+        query = """
+                    SELECT user_id
+                    FROM User
+        """
+        self.cur.execute(query)
+        result = self.cur.fetchall()
+        return result[0]['user_id']
+
+    def get_user_password(self, user_id):
+        query = f"""
+                    SELECT password
+                    FROM User
+                    WHERE user_id = 'remadende'
+        """
+        self.cur.execute(query)
+        result = self.cur.fetchall()
+        return result[0]['password']
 
 if __name__ == "__main__":
     # Test the db connection

@@ -27,11 +27,8 @@ def index():
 
     return render_template('exp_info.html', data=data)
 
-@app.errorhandler(500)
-def internal_error(error):
-    return render_template('error_pages/500.html'), 500
-
 @app.route('/search/<nde>', methods=['GET', 'POST'])
+@login_required
 def search(nde):
     db = Database()
     data = db.list_exp_info()
@@ -199,6 +196,7 @@ def search(nde):
     return render_template('search.html', data=data, form=form, nde=nde)
 
 @app.route('/result/<nde>', methods=['GET', 'POST'])
+@login_required
 def result(nde):
     loading_amp = session.get('loading_amp', None)
     exp_id = session.get('exp_id', None)
@@ -266,6 +264,7 @@ def result(nde):
         return render_template('result.html', data=data, nde=nde, graphJSON=graphJSON, graphJSON2=graphJSON2)
 
 @app.route('/files', methods=['GET', 'POST'])
+@login_required
 def files():
     s3_resource = boto3.resource('s3')
     my_bucket = s3_resource.Bucket('remade-nde')
@@ -293,6 +292,7 @@ def files():
 
 
 @app.route('/download', methods=['POST'])
+@login_required
 def download():
     key = request.form['key']
 
@@ -310,7 +310,8 @@ def download():
 # User login
 @login_manager.user_loader
 def user_loader(user_id):
-    users = {'Me': {'password': 'myself'}}
+    db = Database()
+    users = db.get_user_ids()
     if user_id not in users:
         return
 
@@ -323,10 +324,13 @@ def login():
     if request.method == 'GET':
         return render_template("login.html")
 
+    db = Database()
+    users = db.get_user_ids()
+
     user_id = request.form['user_id']
     password = request.form['password']
-    users = {'Me': {'password': 'myself'}}
-    if (user_id in users) and (password == users[user_id]['password']):
+
+    if (user_id in users) and (password == db.get_user_password(user_id)):
         user = User()
         user.id = user_id
         login_user(user)
@@ -343,7 +347,12 @@ def logout():
     logout_user()
     return render_template("login.html")
 
+
 # Miscellaneous 
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('error_pages/500.html'), 500
+
 @app.after_request
 def after_request(response):
 	response.headers["Cache-Control"] = "no-store"

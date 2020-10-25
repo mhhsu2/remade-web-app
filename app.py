@@ -314,8 +314,7 @@ class User(UserMixin):
 @login_manager.user_loader
 def user_loader(user_id):
     db = Database()
-    users = db.get_user_ids()
-    if user_id not in users:
+    if user_id != db.get_user_id(user_id):
         return
 
     user = User()
@@ -327,13 +326,11 @@ def login():
     if request.method == 'GET':
         return render_template("login.html")
 
-    db = Database()
-    users = db.get_user_ids()
-
     user_id = request.form['user_id']
     password = request.form['password']
 
-    if (user_id in users) and (password == db.get_user_password(user_id)):
+    db = Database()
+    if (user_id == db.get_user_id(user_id)) and (password == db.get_user_password(user_id)):
         user = User()
         user.id = user_id
         login_user(user)

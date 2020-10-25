@@ -137,10 +137,11 @@ class Database:
         return result
         
 
-    def get_user_ids(self):
-        query = """
+    def get_user_id(self, user_id):
+        query = f"""
                     SELECT user_id
                     FROM User
+                    WHERE user_id = '{user_id}'
         """
         self.cur.execute(query)
         result = self.cur.fetchall()
@@ -150,7 +151,7 @@ class Database:
         query = f"""
                     SELECT password
                     FROM User
-                    WHERE user_id = 'remadende'
+                    WHERE user_id = '{user_id}'
         """
         self.cur.execute(query)
         result = self.cur.fetchall()

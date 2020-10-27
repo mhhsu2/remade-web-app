@@ -1,3 +1,6 @@
+import os
+import sys
+
 import pandas as pd
 from flask import Flask, redirect, render_template, request, session, url_for, flash, Response
 from flask_login import UserMixin, LoginManager, login_user, logout_user, login_required, current_user
@@ -9,6 +12,8 @@ from plotly_figure import plotly_ir, plotly_ae, plotly_lu, plotly_nlu, plotly_xr
 from utils import naming_file
 
 import boto3
+
+sys.path.insert(0, os.path.dirname(__file__))
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'my key values'
@@ -359,4 +364,4 @@ def after_request(response):
 	return response
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

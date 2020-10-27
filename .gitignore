@@ -130,6 +130,7 @@ dmypy.json
 
 # General
 .DS_Store
+.vscode
 
 # MySQL DB info
 mysql_db

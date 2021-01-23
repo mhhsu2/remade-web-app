@@ -19,7 +19,7 @@ login_manager.login_view = 'login'
 
 
 @app.route('/', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def index():
     db = Database()
     data = db.list_exp_info()
@@ -27,7 +27,7 @@ def index():
     return render_template('exp_info.html', data=data)
 
 @app.route('/search/<nde>', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def search(nde):
     db = Database()
     data = db.list_exp_info()
@@ -195,7 +195,7 @@ def search(nde):
     return render_template('search.html', data=data, form=form, nde=nde)
 
 @app.route('/result/<nde>', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def result(nde):
     loading_amp = session.get('loading_amp', None)
     exp_id = session.get('exp_id', None)

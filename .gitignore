@@ -141,3 +141,6 @@ mysql_db
 
 # Test stuff
 test*
+
+# Report
+*demo*
